@@ -4,14 +4,11 @@ const fs = require('fs');
 const { XMLParser } = require("fast-xml-parser");
 const XlsxPopulate = require("xlsx-populate");
 
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
 const createWindow = () => {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -22,21 +19,12 @@ const createWindow = () => {
     },
   });
 
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -90,38 +78,30 @@ ipcMain.on('saveText', async (event, xmlFiles) => {
         )
       );
     }
-    const putanjaDoFoldera = await izaberiFolder();
-    if (!putanjaDoFoldera) return;
+    const pathToFolder = await selectFolder();
+    if (!pathToFolder) return;
 
     await Promise.all(
       Object.keys(perUser).map((userName) => {
-        createExcelTable(perUser[userName], putanjaDoFoldera);
+        createExcelTable(perUser[userName], pathToFolder);
       })
     );
-
 
   } catch (err) {
     console.log(err);
   }
-
 })
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-
 function readXml(filePaths) {
   return Promise.all(
     filePaths.map((file) => {
       return fs.promises.readFile(file, { encoding: "utf8" });
-
     })
   );
 }
@@ -129,8 +109,6 @@ function readXml(filePaths) {
 function xmlParser(xmlFileData) {
   const parser = new XMLParser();
   const data = parser.parse(xmlFileData);
-
-  // console.log(data)
 
   if (
     !Array.isArray(
@@ -182,10 +160,7 @@ function returnFormData(dateString) {
   return dateFormat;
 }
 
-async function createExcelTable(data, putanjaDoFoldera) {
-
-
-
+async function createExcelTable(data, pathToFolder) {
   const fileName = data[0].imeIPrezime;
   // Creating a new workbook
   const workbook = await XlsxPopulate.fromBlankAsync();
@@ -279,19 +254,17 @@ async function createExcelTable(data, putanjaDoFoldera) {
     row.cell(11).value(entry.DopTeretZaposlenog);
     row.cell(12).value(entry.DopTeretPoslodavca);
 
-    // row.cell(4).style({ fill: { type: "solid", color: "FFFFFF" } });
-
     row.style({ horizontalAlignment: "center" });
   });
 
   // Recording the workbook to a file
 
-  await workbook.toFileAsync(`${putanjaDoFoldera}/${fileName}.xlsx`);
+  await workbook.toFileAsync(`${pathToFolder}/${fileName}.xlsx`);
 }
 
-async function izaberiFolder() {
+async function selectFolder() {
   const opcije = {
-    title: 'Izaberite folder',
+    title: 'Select folder',
     properties: ['openDirectory'],
   };
 

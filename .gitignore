@@ -90,3 +90,6 @@ typings/
 
 # Electron-Forge
 out/
+
+#  Dist file
+dist/
