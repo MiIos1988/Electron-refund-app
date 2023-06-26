@@ -4,6 +4,8 @@ body {
   margin: auto;
   max-width: 38rem;
   padding: 5rem 2rem;
+  background-color: gainsboro;
+
 }
 .container{
   text-align: center;
