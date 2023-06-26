@@ -3,5 +3,11 @@ body {
     Arial, sans-serif;
   margin: auto;
   max-width: 38rem;
-  padding: 2rem;
+  padding: 5rem 2rem;
+}
+.container{
+  text-align: center;
+}
+p, input, button{
+  font-size: 1.2rem;
 }
