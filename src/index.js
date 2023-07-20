@@ -148,19 +148,17 @@ function xmlParser(xmlFileData) {
       (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000)
         ? 0
         : income["ns1:SVP"] === 101601000
-        ? 25
+        ? 24
         : income["ns1:SVP"] === 105602000
         ? 34.3
         : income["ns1:SVP"] === 101605000
-        ? 25
+        ? 24
         : income["ns1:SVP"] === 105999000
         ? 10.3
         : income["ns1:SVP"] === 101120000
-        ? 25
+        ? 24
         : income["ns1:SVP"] === 105120000
-        ? 36.05
-        : income["ns1:SVP"] === 105602000
-        ? 35.3
+        ? 35.05
         : 19.9) / 100
     ).toFixed(2),
     DopTeretPoslodavca: (
@@ -179,9 +177,7 @@ function xmlParser(xmlFileData) {
         ? 0
         : income["ns1:SVP"] === 105120000
         ? 0
-        : income["ns1:SVP"] === 105602000
-        ? 0
-        : 16.15) / 100
+        : 15.15) / 100
     ).toFixed(2),
   }));
 }
