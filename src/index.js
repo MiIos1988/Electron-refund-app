@@ -125,6 +125,7 @@ function xmlParser(xmlFileData) {
       ],
     ];
   }
+
   return data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
     "ns1:PodaciOPrihodima"
   ].map((income) => ({
@@ -145,39 +146,41 @@ function xmlParser(xmlFileData) {
     NEZ: income["ns1:NEZ"],
     DopTeretZaposlenog: (
       (income["ns1:OsnovicaDoprinosi"] *
-      (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000)
-        ? 0
-        : income["ns1:SVP"] === 101601000
-        ? 24
-        : income["ns1:SVP"] === 105602000
-        ? 34.3
-        : income["ns1:SVP"] === 101605000
-        ? 24
-        : income["ns1:SVP"] === 105999000
-        ? 10.3
-        : income["ns1:SVP"] === 101120000
-        ? 24
-        : income["ns1:SVP"] === 105120000
-        ? 35.05
-        : 19.9) / 100
+        (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000
+          ? 0
+          : income["ns1:SVP"] === 101601000
+          ? 24
+          : income["ns1:SVP"] === 105602000
+          ? 34.3
+          : income["ns1:SVP"] === 101605000
+          ? 24
+          : income["ns1:SVP"] === 105999000
+          ? 10.3
+          : income["ns1:SVP"] === 101120000
+          ? 24
+          : income["ns1:SVP"] === 105120000
+          ? 35.05
+          : 19.9)) /
+      100
     ).toFixed(2),
     DopTeretPoslodavca: (
       (income["ns1:OsnovicaDoprinosi"] *
-      (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000)
-        ? 0
-        : income["ns1:SVP"] === 101601000
-        ? 0
-        : income["ns1:SVP"] === 105602000
-        ? 0
-        : income["ns1:SVP"] === 101605000
-        ? 0
-        : income["ns1:SVP"] === 105999000
-        ? 4
-        : income["ns1:SVP"] === 101120000
-        ? 0
-        : income["ns1:SVP"] === 105120000
-        ? 0
-        : 15.15) / 100
+        (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000
+          ? 0
+          : income["ns1:SVP"] === 101601000
+          ? 0
+          : income["ns1:SVP"] === 105602000
+          ? 0
+          : income["ns1:SVP"] === 101605000
+          ? 0
+          : income["ns1:SVP"] === 105999000
+          ? 4
+          : income["ns1:SVP"] === 101120000
+          ? 0
+          : income["ns1:SVP"] === 105120000
+          ? 0
+          : 15.15)) /
+      100
     ).toFixed(2),
   }));
 }
