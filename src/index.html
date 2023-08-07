@@ -11,8 +11,12 @@
   <div class="container">
     <h1>💖 The Accountant - Moj Računovođa!</h1>
     <p>Godišnje potvrde.</p>
-    <input type="file" id="xmlFilesInput" accept=".xml" multiple />
-    <button id="myButton">Konvertuj</button>
+    <div class="butt">
+      <label for="xmlFilesInput" id="customInput">Dodaj failove</label>
+      <input type="file" id="xmlFilesInput" hidden="hidden" accept=".xml" multiple />
+      <button id="myButton">Konvertuj</button>
+    </div>
+    <p id="msg"></p>
   </div>
 </body>
 
