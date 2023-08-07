@@ -1,10 +1,10 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const path = require("path");
-const fs = require("fs");
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
+const fs = require('fs');
 const { XMLParser } = require("fast-xml-parser");
 const XlsxPopulate = require("xlsx-populate");
 
-if (require("electron-squirrel-startup")) {
+if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
@@ -13,26 +13,26 @@ const createWindow = () => {
     width: 700,
     height: 450,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
       contextIsolation: false,
-      nodeIntegration: true,
+      nodeIntegration: true
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "index.html"));
+  mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.setMenu(null);
   // mainWindow.webContents.openDevTools();
 };
 
-app.on("ready", createWindow);
+app.on('ready', createWindow);
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-ipcMain.on("saveText", async (event, xmlFiles) => {
+ipcMain.on('saveText', async (event, xmlFiles) => {
   try {
     const xmlData = await readXml(xmlFiles);
     const parsedData = xmlData.map(xmlParser);
@@ -90,9 +90,9 @@ ipcMain.on("saveText", async (event, xmlFiles) => {
   } catch (err) {
     console.log(err);
   }
-});
+})
 
-app.on("activate", () => {
+app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
@@ -113,26 +113,25 @@ function xmlParser(xmlFileData) {
   if (
     !Array.isArray(
       data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
-        "ns1:PodaciOPrihodima"
+      "ns1:PodaciOPrihodima"
       ]
     )
   ) {
     data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
       "ns1:PodaciOPrihodima"
     ] = [
-      data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
+        data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
         "ns1:PodaciOPrihodima"
-      ],
-    ];
+        ],
+      ];
   }
-
   return data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
     "ns1:PodaciOPrihodima"
   ].map((income) => ({
     imeIPrezime: `${income["ns1:Ime"]} ${income["ns1:Prezime"]}`,
     date: returnFormData(
       data["ns1:PodaciPoreskeDeklaracije"]["ns1:PodaciOPrijavi"][
-        "ns1:DatumPlacanja"
+      "ns1:DatumPlacanja"
       ]
     ),
     SVP: income["ns1:SVP"],
@@ -145,41 +144,11 @@ function xmlParser(xmlFileData) {
     ZDR: income["ns1:ZDR"],
     NEZ: income["ns1:NEZ"],
     DopTeretZaposlenog: (
-      (income["ns1:OsnovicaDoprinosi"] *
-        (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000
-          ? 0
-          : income["ns1:SVP"] === 101601000
-          ? 24
-          : income["ns1:SVP"] === 105602000
-          ? 34.3
-          : income["ns1:SVP"] === 101605000
-          ? 24
-          : income["ns1:SVP"] === 105999000
-          ? 10.3
-          : income["ns1:SVP"] === 101120000
-          ? 24
-          : income["ns1:SVP"] === 105120000
-          ? 35.05
-          : 19.9)) /
+      (income["ns1:OsnovicaDoprinosi"] * 19.9) /
       100
     ).toFixed(2),
     DopTeretPoslodavca: (
-      (income["ns1:OsnovicaDoprinosi"] *
-        (income["ns1:SVP"] === 101110000 || income["ns1:SVP"] === 102110000
-          ? 0
-          : income["ns1:SVP"] === 101601000
-          ? 0
-          : income["ns1:SVP"] === 105602000
-          ? 0
-          : income["ns1:SVP"] === 101605000
-          ? 0
-          : income["ns1:SVP"] === 105999000
-          ? 4
-          : income["ns1:SVP"] === 101120000
-          ? 0
-          : income["ns1:SVP"] === 105120000
-          ? 0
-          : 15.15)) /
+      (income["ns1:OsnovicaDoprinosi"] * 16.15) /
       100
     ).toFixed(2),
   }));
@@ -295,8 +264,8 @@ async function createExcelTable(data, pathToFolder) {
 
 async function selectFolder() {
   const opcije = {
-    title: "Select folder",
-    properties: ["openDirectory"],
+    title: 'Select folder',
+    properties: ['openDirectory'],
   };
 
   const rezultat = await dialog.showOpenDialog(opcije);

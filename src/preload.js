@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const myButton = document.getElementById('myButton');
     xmlFilesInput.addEventListener("change", (event) => {
         const selectedFiles = event.target.files;
-        console.log(selectedFiles)
         if (selectedFiles.length > 0) {
             msg.textContent = `Dodali ste ${selectedFiles.length} fajl(a).`;
           } else {
