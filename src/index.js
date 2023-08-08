@@ -87,6 +87,9 @@ ipcMain.on('saveText', async (event, xmlFiles) => {
         createExcelTable(perUser[userName], pathToFolder);
       })
     );
+
+    event.sender.send('tablesFinished');
+    
   } catch (err) {
     console.log(err);
   }
