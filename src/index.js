@@ -38,10 +38,10 @@ ipcMain.on('saveText', async (event, xmlFiles) => {
 
     const perUser = parsedData.reduce((acc, curr) => {
       curr.forEach((element) => {
-        if (acc[element.imeIPrezime]) {
-          acc[element.imeIPrezime].push(element);
+        if (acc[element.jmbg]) {
+          acc[element.jmbg].push(element);
         } else {
-          acc[element.imeIPrezime] = [element];
+          acc[element.jmbg] = [element];
         }
       });
       return acc;
@@ -130,6 +130,7 @@ function xmlParser(xmlFileData) {
   return data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
     "ns1:PodaciOPrihodima"
   ].map((income) => ({
+    jmbg: income["ns1:IdentifikatorPrimaoca"],
     imeIPrezime: `${income["ns1:Ime"]} ${income["ns1:Prezime"]}`,
     date: returnFormData(
       data["ns1:PodaciPoreskeDeklaracije"]["ns1:PodaciOPrijavi"][
