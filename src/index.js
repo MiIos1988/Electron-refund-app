@@ -115,47 +115,68 @@ function xmlParser(xmlFileData) {
   if (
     !Array.isArray(
       data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
-      "ns1:PodaciOPrihodima"
+        "ns1:PodaciOPrihodima"
       ]
     )
   ) {
     data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
       "ns1:PodaciOPrihodima"
     ] = [
-        data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
+      data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
         "ns1:PodaciOPrihodima"
-        ],
-      ];
+      ],
+    ];
   }
+
   return data["ns1:PodaciPoreskeDeklaracije"]["ns1:DeklarisaniPrihodi"][
     "ns1:PodaciOPrihodima"
-  ].map((income) => ({
-    jmbg: income["ns1:IdentifikatorPrimaoca"],
-    imeIPrezime: `${income["ns1:Ime"]} ${income["ns1:Prezime"]}`,
-    date: returnFormData(
-      data["ns1:PodaciPoreskeDeklaracije"]["ns1:PodaciOPrijavi"][
-      "ns1:DatumPlacanja"
-      ]
-    ),
-    SVP: income["ns1:SVP"],
-    Bruto: income["ns1:Bruto"],
-    PoreskoOslobodjenje: income["ns1:Bruto"] - income["ns1:OsnovicaPorez"],
-    OsnovicaPorez: income["ns1:OsnovicaPorez"],
-    Porez: income["ns1:Porez"],
-    OsnovicaDoprinosi: income["ns1:OsnovicaDoprinosi"],
-    PIO: income["ns1:PIO"],
-    ZDR: income["ns1:ZDR"],
-    NEZ: income["ns1:NEZ"],
-    DopTeretZaposlenog: (
-      (income["ns1:OsnovicaDoprinosi"] * 19.9) /
-      100
-    ).toFixed(2),
-    DopTeretPoslodavca: (
-      (income["ns1:OsnovicaDoprinosi"] * 16.15) /
-      100
-    ).toFixed(2),
-  }));
+  ].map((income) => {
+    const osnovicaDoprinosi = income["ns1:OsnovicaDoprinosi"];
+    const SVP = income["ns1:SVP"];
+    const zaposleniStopa = getStopaZaDoprinose(SVP);
+
+    return {
+      jmbg: income["ns1:IdentifikatorPrimaoca"],
+      imeIPrezime: `${income["ns1:Ime"]} ${income["ns1:Prezime"]}`,
+      date: returnFormData(
+        data["ns1:PodaciPoreskeDeklaracije"]["ns1:PodaciOPrijavi"][
+          "ns1:DatumPlacanja"
+        ]
+      ),
+      SVP: SVP,
+      Bruto: income["ns1:Bruto"],
+      PoreskoOslobodjenje: income["ns1:Bruto"] - income["ns1:OsnovicaPorez"],
+      OsnovicaPorez: income["ns1:OsnovicaPorez"],
+      Porez: income["ns1:Porez"],
+      OsnovicaDoprinosi: osnovicaDoprinosi,
+      PIO: income["ns1:PIO"],
+      ZDR: income["ns1:ZDR"],
+      NEZ: income["ns1:NEZ"],
+      DopTeretZaposlenog: (
+        (osnovicaDoprinosi * zaposleniStopa) /
+        100
+      ).toFixed(2),
+      DopTeretPoslodavca: (
+        (osnovicaDoprinosi * 16.15) /
+        100
+      ).toFixed(2),
+    };
+  });
 }
+
+function getStopaZaDoprinose(SVP) {
+  switch (SVP) {
+    case 101605000:
+      return 24;
+    case 101601000:
+      return 24;
+    case 105602000:
+      return 20;
+    default:
+      return 19.9; 
+  }
+}
+
 
 function returnFormData(dateString) {
   const dateParts = dateString.split("-");
