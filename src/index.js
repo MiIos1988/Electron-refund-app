@@ -134,6 +134,7 @@ function xmlParser(xmlFileData) {
     const osnovicaDoprinosi = income["ns1:OsnovicaDoprinosi"];
     const SVP = income["ns1:SVP"];
     const zaposleniStopa = getStopaZaDoprinose(SVP);
+    const zaposleniStopaTeretPoslodavac = getStopaZaDoprinoseTeretPoslodavac(SVP);
 
     return {
       jmbg: income["ns1:IdentifikatorPrimaoca"],
@@ -157,7 +158,7 @@ function xmlParser(xmlFileData) {
         100
       ).toFixed(2),
       DopTeretPoslodavca: (
-        (osnovicaDoprinosi * 16.15) /
+        (osnovicaDoprinosi * zaposleniStopaTeretPoslodavac) /
         100
       ).toFixed(2),
     };
@@ -165,18 +166,30 @@ function xmlParser(xmlFileData) {
 }
 
 function getStopaZaDoprinose(SVP) {
-  switch (SVP) {
-    case 101605000:
-      return 24;
-    case 101601000:
-      return 24;
-    case 105602000:
-      return 20;
-    default:
-      return 19.9; 
-  }
+switch (SVP) {
+  case 101605000:
+    return 24;
+  case 101601000:
+    return 24;
+  case 105602000:
+    return 20;
+  default:
+    return 19.9; 
+}
 }
 
+function getStopaZaDoprinoseTeretPoslodavac(SVP) {
+switch (SVP) {
+  case 101605000:
+    return 0;
+  case 101601000:
+    return 0;
+  case 105602000:
+    return 0;
+  default:
+    return 16.15; 
+}
+}
 
 function returnFormData(dateString) {
   const dateParts = dateString.split("-");
