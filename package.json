@@ -1,6 +1,6 @@
 {
   "name": "refunds",
-  "productName": "refunds",
+  "productName": "The Accountant PPP PD",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/index.js",

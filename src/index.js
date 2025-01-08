@@ -153,14 +153,8 @@ function xmlParser(xmlFileData) {
       PIO: income["ns1:PIO"],
       ZDR: income["ns1:ZDR"],
       NEZ: income["ns1:NEZ"],
-      DopTeretZaposlenog: (
-        (osnovicaDoprinosi * zaposleniStopa) /
-        100
-      ).toFixed(2),
-      DopTeretPoslodavca: (
-        (osnovicaDoprinosi * zaposleniStopaTeretPoslodavac) /
-        100
-      ).toFixed(2),
+      DopTeretZaposlenog: Number(((osnovicaDoprinosi * zaposleniStopa) / 100).toFixed(2)),
+      DopTeretPoslodavca: Number(((osnovicaDoprinosi * zaposleniStopaTeretPoslodavac) / 100).toFixed(2)),
     };
   });
 }
