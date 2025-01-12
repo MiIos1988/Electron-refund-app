@@ -181,7 +181,7 @@ switch (SVP) {
   case 105602000:
     return 0;
   default:
-    return 16.15; 
+    return 15.15; 
 }
 }
 
